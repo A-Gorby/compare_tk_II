@@ -74,17 +74,17 @@ def read_tkbd_options(path_tkbd_source, fn_tk_bd, cmp_sections):
     if 'Услуги' in cmp_sections:
         df_services = pd.read_excel(os.path.join(path_tkbd_source, fn_tk_bd), sheet_name = 'Услуги')
         print(df_services.shape)
-        display(df_services.head(2))
+        #display(df_services.head(2))
     else: df_services = None
     if 'ЛП' in cmp_sections:
         df_LP = pd.read_excel(os.path.join(path_tkbd_source, fn_tk_bd), sheet_name = 'ЛП')
         print(df_LP.shape)
-        display(df_LP.head(2))
+        #display(df_LP.head(2))
     else: df_LP = None
     if 'РМ' in cmp_sections:
         df_RM = pd.read_excel(os.path.join(path_tkbd_source, fn_tk_bd), sheet_name = 'РМ')
         print(df_RM.shape)
-        display(df_RM.head(2))
+        #display(df_RM.head(2))
     else: df_RM = None
 
     return df_services, df_LP, df_RM
