@@ -390,10 +390,10 @@ class FormsTkCmp:
     def form_param_cmp_03(self):
         # fn_01, columns_values_01,
         # fn_02, columns_values_02):
-        
+
         # print(self.columns_values_01)
         # print(self.columns_values_02)
-        
+
         # self.profile_01_enter = widgets.Text(placeholder=columns_values_01['profile'], value=self.columns_values_01['profile'])
         self.profile_01_enter = widgets.Text(value=self.columns_values_01['profile'])
         self.tk_code_01_enter = widgets.Text(value=self.columns_values_01['tk_code'])
@@ -554,7 +554,7 @@ def read_tkbd_options_filter(path_tkbd_source, fn_tk_bd, cmp_sections, filters):
             # print(filters[section].values())
             # print(cmp_sections.index(section))
             key, value = list(filters[section].items())[0] # [cmp_sections.index(section)]
-            print(section, key ,value)
+            #print(section, key ,value)
             if key is not None:
                 logger.info(f"Filter: {key}: {value}")
                 if value is not None:
@@ -576,7 +576,7 @@ def read_tkbd_options_filter(path_tkbd_source, fn_tk_bd, cmp_sections, filters):
 
 
             logger.info(f"Получены данные с листа '{section}': {df_section.shape}")
-            display(df_section.head(2))
+            #display(df_section.head(2))
             df_lst[i_section] = df_section
         # else: df_services = None
 
@@ -621,6 +621,9 @@ def form_param_esklp_exist_dicts(esklp_dates):
     check_box = Box([Label(value="Выберите дату сохраненного справочника ЕСКЛП:"), esklp_dates_dropdown], layout=form_item_layout)
     form_items = [check_box]
 
-    form_esklp_exist_dicts = Box(form_items, layout=Layout(display='flex', flex_flow= 'column', border='solid 2px', align_items='stretch', width='auto')) #width='90%')) #
+    #form_esklp_exist_dicts = Box(form_items, layout=Layout(display='flex', flex_flow= 'column', border='solid 2px', align_items='stretch', width='460%')) #width='auto')) #
+    form_esklp_exist_dicts = Box(form_items, 
+    layout=Layout(display='flex', border='solid 2px', flex_flow= 'column', align_items='flex-start', justify_content='space-between', width='auto')) #width='60%'))   flex_flow= 'row',
+    
     # return form, fn_check_file_drop_douwn, fn_dict_file_drop_douwn, radio_btn_big_dict, radio_btn_prod_options, similarity_threshold_slider, max_entries_slider
     return form_esklp_exist_dicts, esklp_dates_dropdown
