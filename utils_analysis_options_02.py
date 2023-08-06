@@ -39,7 +39,8 @@ import matplotlib.pyplot as plt
 # %matplotlib inline
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
-from utils_enrichment_options import preprocess_tkbd_options
+from utils_enrichment_options_02 import preprocess_tkbd_options_02
+from utils_significance import calc_significance
 from utils_io import save_df_lst_to_excel
 from utils_io import logger
 
@@ -1290,8 +1291,8 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
                   # forms.cmp_cols_file_01, forms.cmp_cols_file_02,
                   fn_smnn_pickle,
                   cmp_file_name, models,
-                  significance_check = forms.radio_btn_significance.value, # Все строки
-                  significance_threshold = forms.significance_threshold_slider.value/100,
+                  significance_check, # Все строки
+                  significance_threshold,
                   significance_serv_by_UET=True,
                   save_enriched=False,
                   )

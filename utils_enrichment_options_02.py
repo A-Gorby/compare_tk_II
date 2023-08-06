@@ -26,6 +26,7 @@ if len(logger.handlers) > 1:
 
 from  local_dictionaries import sevice_sections, service_chapters, service_types_A, service_types_B, service_classes_A, service_classes_B
 from  local_dictionaries import dict_ath_anatomy, dict_ath_therapy, dict_ath_pharm, dict_ath_chemical
+from utils_significance import calc_significance
 
 AZ_lst = [chr(i) for i in range(ord('A'), ord('Z')+1)]
 # print(AZ_lst)
