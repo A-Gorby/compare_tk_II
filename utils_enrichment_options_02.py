@@ -360,6 +360,7 @@ def preprocess_tkbd_options_02(
 
     # print(f"fn_check_file1: {fn_check_file1}, fn_check_file2: {fn_check_file2}")
     df_services, df_LP, df_RM = None, None, None
+    df_services_s, df_LP_s, df_RM_s = None, None, None
     sections = ['Услуги', 'ЛП', 'РМ']
     tk_serv_cols = ['Код услуги по Номенклатуре медицинских услуг (Приказ МЗ № 804н)', 'Наименование услуги по Номенклатуре медицинских услуг (Приказ МЗ №804н)', #'Код услуги по Реестру МГФОМС',
              'Усредненная частота предоставления', 'Усредненная кратность применения', 'УЕТ 1', 'УЕТ 2']
@@ -465,7 +466,11 @@ def preprocess_tkbd_options_02(
                 
         df_cmp1_s, df_cmp2_s = df_cmp_s[0], df_cmp_s[1]
     
-    
+    ##################
+    for df_cmp in df_cmp_s:
+        for df in df_cmp:
+            print('after filter:', df.shape)
+    ##################
     df_to_save_lst = []
     i_s, section = 0, 'Услуги'
     if section in cmp_sections:

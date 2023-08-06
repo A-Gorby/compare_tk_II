@@ -40,7 +40,6 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
 from utils_enrichment_options_02 import preprocess_tkbd_options_02
-from utils_significance import calc_significance
 from utils_io import save_df_lst_to_excel
 from utils_io import logger
 
