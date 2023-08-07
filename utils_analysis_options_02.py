@@ -1261,6 +1261,7 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
                         significance_check, # = forms.radio_btn_significance.value, # Все строки
                         significance_threshold,# = forms.significance_threshold_slider.value/100,
                         significance_serv_by_UET=True,
+                        save_enriched=True,
                         ):
 
     if fn_check_file1 is None or  fn_check_file2 is None:
