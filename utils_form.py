@@ -51,6 +51,7 @@ class FormsTkCmp:
         self.radio_btn_significance = None
         self.significance_threshold_slider = None
         self.radio_btn_same_headers = None
+        self.checkbox_sign_serv_by_UET = None
         self.form_03 = None
 
         # form_04
@@ -409,11 +410,13 @@ class FormsTkCmp:
         self.significance_threshold_slider = widgets.IntSlider(min=0, max=100, value=100)
         self.radio_btn_same_headers = widgets.RadioButtons(options=['Повторяет значения 1-го файла', 'Не повторяет'], value= 'Не повторяет')
         # self.radio_btn_similary_headers = widgets.RadioButtons(options=['Повторяет значения 1-го файла', 'Не повторяет'], value= 'Не повторяет')
+        self.checkbox_sign_serv_by_UET  = widgets.Checkbox(value=True, description='Значимость Услуг - по УЕТ', disabled=False, indent=False)
 
         form_item_layout = Layout(display='flex', flex_flow='row', justify_content='space-between')
 
         radio_btn_significance_box = Box([Label(value='Сравнение по всем строкам или по значимым:'), self.radio_btn_significance], layout=form_item_layout)
         significance_threshold_box = Box([Label(value='Сравнение по строкам, составляющим __% значимости ТК:'), self.significance_threshold_slider], layout=form_item_layout)
+        checkbox_sign_serv_by_UET_box = Box([self.checkbox_sign_serv_by_UET], layout=form_item_layout)
 
         radio_btn_same_headers_box = Box([Label(value='Профиль, Код и Наименование ТК 2-го файла:'), self.radio_btn_same_headers], layout=form_item_layout)
         header_box = Box([radio_btn_same_headers_box],  layout=Layout(
@@ -429,7 +432,7 @@ class FormsTkCmp:
         style={'font_weight': 'bold', 'font_size': '30px'}
         grid_box = widgets.GridBox([widgets.HTML(s) for s in headers] + form_items_flat,
                     layout=widgets.Layout(grid_template_columns="repeat(3, 30%)", border='solid 1px', padding='10px 0px 10px 0px'))
-        footer_box = Box([radio_btn_significance_box, significance_threshold_box],
+        footer_box = Box([radio_btn_significance_box, significance_threshold_box, checkbox_sign_serv_by_UET_box],
                         layout=Layout(display='flex', flex_flow='row', justify_content='space-between', border='solid 1px', padding='10px 0px 10px 0px'))
         self.form_03 = Box([header_box, grid_box, footer_box],
                       layout=Layout(display='flex', flex_flow= 'column', border='solid 2px', align_items='stretch', width='80%')) #width='auto', , margin='400px 0px 400px 0'
@@ -622,8 +625,8 @@ def form_param_esklp_exist_dicts(esklp_dates):
     form_items = [check_box]
 
     #form_esklp_exist_dicts = Box(form_items, layout=Layout(display='flex', flex_flow= 'column', border='solid 2px', align_items='stretch', width='460%')) #width='auto')) #
-    form_esklp_exist_dicts = Box(form_items, 
+    form_esklp_exist_dicts = Box(form_items,
     layout=Layout(display='flex', border='solid 2px', flex_flow= 'column', align_items='flex-start', justify_content='space-between', width='auto')) #width='60%'))   flex_flow= 'row',
-    
+
     # return form, fn_check_file_drop_douwn, fn_dict_file_drop_douwn, radio_btn_big_dict, radio_btn_prod_options, similarity_threshold_slider, max_entries_slider
     return form_esklp_exist_dicts, esklp_dates_dropdown
