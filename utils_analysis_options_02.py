@@ -1129,7 +1129,7 @@ def def_cmp_file_name(
     models= [model_01, model_02]
     return cmp_file_name, models
 
-    
+
 
 # def total_comparsion_analysis(
 #     path_tk_models_source, fn_tk_description,
@@ -1178,16 +1178,16 @@ def total_comparsion_analysis_options(data_source_dir, fn_check_file1, fn_check_
                 data_processed_dir, fn_TK_save,
                 cmp_sections
             )
-            
+
 def total_comparsion_analysis_options_02(
         data_source_dir, data_processed_dir, cmp_sections,
-        fn_check_file1, fn_check_file2, 
-        df_services, df_LP, df_RM, 
-        cmp_file_name, 
+        fn_check_file1, fn_check_file2,
+        df_services, df_LP, df_RM,
+        cmp_file_name,
         profile_01, tk_code_01, tk_name_01, model_01,
         profile_02, tk_code_02, tk_name_02, model_02,
         models):
-        
+
     xls_files = [fn_check_file1, fn_check_file2,]
     tk_codes = [tk_code_01, tk_code_02]
     tk_names = xls_files #[tk_name_01, tk_name_02]
@@ -1216,7 +1216,7 @@ def total_comparsion_analysis_options_02(
         data_processed_dir, fn_TK_save,
         cmp_sections
     )
-    
+
 def compare_tk_options( data_source_dir, data_processed_dir, supp_dict_dir,
                         fn_check_file1, fn_check_file2,
                         cmp_cols_file_01, cmp_cols_file_02,
@@ -1249,7 +1249,7 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
                         df_lst_by_file,
                         fn_check_file1, fn_check_file2,
                         cmp_cols_file_01, cmp_cols_file_02,
-                        fn_smnn_pickle, 
+                        fn_smnn_pickle,
                         cmp_sections,
                         # profile='profile_test', tk_code=7777777, tk_name='tk_test',
                         # models = ['File_01', 'File_02']
@@ -1257,7 +1257,7 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
                         # profile_01=forms.profile_01_enter.value, tk_code_01=forms.tk_code_01_enter.value, tk_name_01 = forms.tk_name_01_enter.value, model_01=forms.model_01_enter.value,
                         # profile_02=forms.profile_02_enter.value, tk_code_02=forms.tk_code_02_enter.value, tk_name_02=forms.tk_name_02_enter.value, model_02=forms.model_02_enter.value
                         profile_01, tk_code_01, tk_name_01, model_01,
-                        profile_02, tk_code_02, tk_name_02, model_02,                           
+                        profile_02, tk_code_02, tk_name_02, model_02,
                         significance_check, # = forms.radio_btn_significance.value, # Все строки
                         significance_threshold,# = forms.significance_threshold_slider.value/100,
                         significance_serv_by_UET=True,
@@ -1293,7 +1293,7 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
                   significance_check, # Все строки
                   significance_threshold,
                   significance_serv_by_UET=True,
-                  save_enriched=False,
+                  save_enriched=True,
                   )
 
     if df_services is not None: display(df_services.head(2))
@@ -1305,12 +1305,11 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
     #     profile=profile, tk_code=tk_code, tk_name=tk_name, models=models)
     total_comparsion_analysis_options_02(
         data_source_dir, data_processed_dir, cmp_sections,
-        fn_check_file1, fn_check_file2, 
-        df_services, df_LP, df_RM, 
-        cmp_file_name, 
+        fn_check_file1, fn_check_file2,
+        df_services, df_LP, df_RM,
+        cmp_file_name,
         profile_01, tk_code_01, tk_name_01, model_01,
         profile_02, tk_code_02, tk_name_02, model_02,
         models=models)
 
 
-    
