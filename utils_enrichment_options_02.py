@@ -343,7 +343,7 @@ def preprocess_tkbd_options(
 from utils_io import format_excel_sheet_cols
 from utils_significance import calc_significance_01, calc_significance_serv_uet, calc_fraction, filter_most_of_fraction_sum
 def preprocess_tkbd_options_02(
-    data_source_dir, 
+    data_source_dir,
     data_processed_dir,
     supp_dict_dir,
     cmp_sections,
@@ -433,6 +433,16 @@ def preprocess_tkbd_options_02(
                 print(f"'{section}', file_02: renamed_columns: {renamed_columns2_str}")
     # print(renamed_columns1, renamed_columns2)
 
+    ######################
+    # update Модель пациента
+    for df in df_cmp1:
+        if df is not None:
+            df['Модель пациента']=models[0]
+    for df in df_cmp2:
+        if df is not None:
+            df['Модель пациента']=models[0]
+    #####################
+
     col_significance = 'Частота_Кратность'
     col_fractions  = 'Частота_Кратность_fraction'
     col_significance_serv = 'Частота_Кратность_Услуги_УЕТ'
@@ -453,7 +463,7 @@ def preprocess_tkbd_options_02(
                     if section!='Услуги':
                         # print(i_d, section, "if section!='Услуги'")
                         df_s = filter_most_of_fraction_sum(df, col_fractions, significance_threshold)
-                        
+
                     else:
                         if significance_serv_by_UET:
                             # print(i_d, section, "if significance_serv_by_UET")
@@ -463,13 +473,13 @@ def preprocess_tkbd_options_02(
                             df_s = filter_most_of_fraction_sum(df, col_fractions, significance_threshold)
                     # print(section, df_s.shape)
                     df_cmp_s[i_d].append(df_s)
-                
+
         df_cmp1_s, df_cmp2_s = df_cmp_s[0], df_cmp_s[1]
-    
+
     ##################
     for df_cmp in df_cmp_s:
         for df in df_cmp:
-            print('after filter:', df.shape)
+            print(df.shape)
     ##################
     df_to_save_lst = []
     i_s, section = 0, 'Услуги'
@@ -480,24 +490,27 @@ def preprocess_tkbd_options_02(
             ['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
                 col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]],
             # ['Модель пациента', 'Файл Excel'] + [col_significance+section, col_significance+section +suffix_fractions, col_significance_serv, col_significance_serv+suffix_fractions]],
-                                 
+
             df_cmp2[ind][
             ['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
                 col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]]
-                              ], 
+                              ],
                                 ignore_index=True)
         df_services = preprocess_services(df_services)
         df_to_save_lst.append(df_services)
-        if significance_check!= 'Все строки':
+        # print("significance_check", significance_check)
+        if significance_check != 'Все строки':
+            print("df_cmp1_s[ind].columns", df_cmp1_s[ind].columns)
+            print("df_cmp2_s[ind].columns", df_cmp2_s[ind].columns)
             df_services_s = pd.concat(
                 [df_cmp1_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
                     col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]],
                 df_cmp2_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
-                    col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]]], 
+                    col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]]],
                                     ignore_index=True)
             df_services_s = preprocess_services(df_services_s)
 
-        
+
     i_s, section = 1, 'ЛП'
     if section in cmp_sections:
         ind = cmp_sections.index(section)
@@ -524,13 +537,13 @@ def preprocess_tkbd_options_02(
     # if 'РМ' in cmp_sections:
         ind = cmp_sections.index(section)
         df_RM = pd.concat([df_cmp1[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [col_significance, col_significance+suffix_fractions]],
-                           df_cmp2[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [col_significance, col_significance+suffix_fractions]], ], 
+                           df_cmp2[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [col_significance, col_significance+suffix_fractions]], ],
               ignore_index=True)
         df_RM = preprocess_RM(df_RM)
         df_to_save_lst.append(df_RM)
         if significance_check!= 'Все строки':
             df_RM_s = pd.concat([df_cmp1_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [col_significance, col_significance+suffix_fractions]],
-                                 df_cmp2_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [col_significance, col_significance+suffix_fractions]], ], 
+                                 df_cmp2_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [col_significance, col_significance+suffix_fractions]], ],
               ignore_index=True)
             df_RM_s = preprocess_RM(df_RM_s)
     # total_sheet_names = ['Услуги', 'ЛП', 'РМ']
@@ -557,4 +570,4 @@ def preprocess_tkbd_options_02(
     if significance_check!= 'Все строки':
         return df_services_s, df_LP_s, df_RM_s
     else:
-        return df_services, df_LP, df_RM    
+        return df_services, df_LP, df_RM

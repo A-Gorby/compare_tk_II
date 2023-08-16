@@ -245,14 +245,20 @@ def simplify_multi_index_02 (df_p, tk_names, model_names):
 
 def def_differencies(df_pp, tk_names, model_names, code_names_columns, function_extract_names=None):
     diff_col_name = 'Разница'
+    if diff_col_name not in df_pp.columns:
+        df_pp[diff_col_name] = None
     diff_lst = []
     try:
         df_pp[diff_col_name] = df_pp[[model_names[0], model_names[1]]].progress_apply(lambda x: pd.Series( x[0]-x[1]), axis=1)
     except Exception as err:
         print(err)
-        df_pp[diff_col_name] = df_pp[[model_names[0], model_names[1]]].progress_apply(lambda x: pd.Series( float(x[0])-float(x[1])), axis=1)
-
-    for i_row, row in df_pp[df_pp[diff_col_name]!=0].iterrows():
+        print(df_pp.columns)
+        try:
+            df_pp[diff_col_name] = df_pp[[model_names[0], model_names[1]]].progress_apply(lambda x: pd.Series( float(x[0])-float(x[1])), axis=1)
+        except Exception as err:
+            print(err)
+            print(df_pp.columns)
+    for i_row, row in df_pp[df_pp[diff_col_name].notnull() & (df_pp[diff_col_name]!=0)].iterrows():
         if function_extract_names is not None:
             code_names = function_extract_names(row.values[0])
             # diff_lst.append([row.values[0], *[v for v in row.values[1:]],*[n for n in code_names] ])
@@ -274,8 +280,14 @@ def def_differencies_02(df_pp, model_names, code_names_columns, function_extract
     try:
         df_pp[diff_col_name] = df_pp[[model_names[0], model_names[1]]].progress_apply(lambda x: pd.Series( x[0]-x[1]), axis=1)
     except Exception as err:
+        print(df_pp.columns)
         print(err)
-        df_pp[diff_col_name] = df_pp[[model_names[0], model_names[1]]].progress_apply(lambda x: pd.Series( float(x[0])-float(x[1])), axis=1)
+        try:
+            df_pp[diff_col_name] = df_pp[[model_names[0], model_names[1]]].progress_apply(lambda x: pd.Series( float(x[0])-float(x[1])), axis=1)
+        except Exceptions as err:
+            print(df_pp.columns)
+            print(err)
+
 
     for i_row, row in df_pp[df_pp[diff_col_name]!=0].iterrows():
         if function_extract_names is not None:
@@ -486,11 +498,19 @@ def services_analysis(
             plt.figure(figsize=(25, 10), tight_layout=True)
             for i_max in range(10):
                 # df_pp1 = df_pp[(df_pp['База']>=y_lim_min + i_max) | (df_pp['Техно']>=y_lim_min + i_max)]
-                df_pp1 = df_pp[(df_pp[model_names[0]]>=y_lim_min + i_max) | (df_pp[model_names[1]]>=y_lim_min + i_max)]
+                try:
+                    df_pp1 = df_pp[(df_pp[model_names[0]]>=y_lim_min + i_max) | (df_pp[model_names[1]]>=y_lim_min + i_max)]
 
-                if df_pp1.shape[0] <= n_bars_max_on_picture:
-                    ax1 = df_pp1.plot(kind= kind, x = col_name, rot=45, cmap = cmap)
+                    if df_pp1.shape[0] <= n_bars_max_on_picture:
+                        ax1 = df_pp1.plot(kind= kind, x = col_name, rot=45, cmap = cmap)
+                        break
+                except Exception as err:
+                    logger.error(str(err))
+                    logger.error('Из-за ошибок во входных данных график не масштабируется')
+                    plt.figure(figsize=(25, 6), tight_layout=True)
+                    ax1 = df_pp.plot(kind= kind, x = col_name, rot=45, cmap = cmap)
                     break
+
 
         legend_list = model_names
         ax1.legend(legend_list, loc='best',fontsize=8)

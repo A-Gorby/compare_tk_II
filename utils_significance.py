@@ -1,4 +1,12 @@
 import pandas as pd
+import sys
+from utils_io import logger #, restore_df_from_pickle
+
+if len(logger.handlers) > 1:
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+    from utils_io import logger
+
 # from utils_significance import calc_significance_01, calc_significance_serv_uet, calc_fraction, filter_most_of_fraction_sum
 def calc_significance_01( section, df, col_freq, col_multiplicity):
     # col_significance = 'Частота_Кратность' + '_' + section
@@ -10,7 +18,23 @@ def calc_significance_serv_uet( df, col_freq, col_multiplicity, col_uet1, col_ue
     """  Услуги УЕТ """
     # print("calc_significance_serv_uet:", df.columns)
     col_significance = 'Частота_Кратность_Услуги_УЕТ'
-    df[col_significance] = df[col_freq] * df[col_multiplicity] * (df[col_uet1] *2 + df[col_uet2])
+    try:
+        df[col_significance] = df[col_freq] * df[col_multiplicity] * (df[col_uet1] *2 + df[col_uet2])
+    except Exception as err:
+        # print(err)
+        # print("Неправильные значения в колонках 'Частота', 'Кратность', 'УЕТ1/УЕТ2'")
+        # print("Расчет занчимости будет проводиться без учета УЕТ")
+        logger.error(str(err))
+        logger.error("Неправильные значения в колонках 'Частота', 'Кратность', 'УЕТ1/УЕТ2'")
+        logger.error("Расчет занчимости будет проводиться без учета УЕТ")
+        try:
+            df[col_significance] = df[col_freq] * df[col_multiplicity]
+        except Exception as err:
+            logger.error(str(err))
+            logger.error("Неправильные значения в колонках 'Частота', 'Кратность'")
+            logger.error("Расчет занчимости будет проводиться без учета УЕТ")
+            logger.error("Программа завершена")
+            sys.exit(2)
     return df, col_significance
 def calc_fraction(df, col_to_calc, suffix='_fraction'):
     # print("calc_fraction:", df.columns)
@@ -28,7 +52,7 @@ def calc_fraction(df, col_to_calc, suffix='_fraction'):
         print(f"'{col_to_calc}' is not number dtype")
         return df, col_fractions
     sum = df[col_to_calc].sum()
-    
+
     df[col_fractions] = df[col_to_calc]/sum
 
     return df, col_fractions
@@ -69,7 +93,7 @@ def calc_significance(cmp_sections, df_cmp1, df_cmp2):
                 df_l, col_significance_serv = calc_significance_serv_uet( df_l, col_freq, col_multiplicity, col_uet1, col_uet2)
                 df_l, col_fractions_serv = calc_fraction(df_l, col_significance_serv, suffix='_fraction')
             df_cmp_n[i_d].append(df_l)
-    
+
     df_cmp1_n, df_cmp2_n = df_cmp_n[0], df_cmp_n[1]
-    # return df_cmp1_n, df_cmp2_n, col_significance, col_fractions, col_significance_serv, col_fractions_serv  
+    # return df_cmp1_n, df_cmp2_n, col_significance, col_fractions, col_significance_serv, col_fractions_serv
     return df_cmp1_n, df_cmp2_n

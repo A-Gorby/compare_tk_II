@@ -326,6 +326,18 @@ class FormsTkCmp:
 
         # return form_02, subforms, observed_widgets, changed_widgets
 
+    def form_02_to_null(self):
+        self.fn_01 = None
+        self.fn_02 = None
+        self.cols_file_01 = []
+        self.сols_file_02 = []
+        self.observed_widgets = []
+        self.changed_widgets = []
+        self.form_02 = None
+        self.form_02_subforms = []
+        self.columns_values_01 = {'profile': None, 'tk_code': None, 'tk_name': None, 'model': None}
+        self.columns_values_02 = {'profile': None, 'tk_code': None, 'tk_name': None, 'model': None}
+
     def on_filter_col_drop_douwn_change(self, change):
         # global observed_widgets, changed_widgets, fn_01, fn_02, selected_sections
         # print(change['owner'])
@@ -447,8 +459,12 @@ class FormsTkCmp:
             self.profile_02_enter.value, self.tk_code_02_enter.value, self.tk_name_02_enter.value =\
             self.profile_01_enter.value, self.tk_code_01_enter.value, self.tk_name_01_enter.value
         else:
-            self.profile_02_enter.value, self.tk_code_02_enter.value, self.tk_name_02_enter.value =\
-            self.columns_values_02['profile'], self.columns_values_02['tk_code'], self.columns_values_02['tk_name']
+            try:
+                self.profile_02_enter.value, self.tk_code_02_enter.value, self.tk_name_02_enter.value =\
+                self.columns_values_02['profile'], self.columns_values_02['tk_code'], self.columns_values_02['tk_name']
+            except:
+                pass
+                # The 'value' trait of a Text instance expected a unicode string, not the NoneType None
 
     def on_change_value_copy(self, change):
         # print(change)
