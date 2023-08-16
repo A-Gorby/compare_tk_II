@@ -330,8 +330,10 @@ def services_comparison(
         logger.error(f"Обработка прекращена: файл со сводом ТК, лист'Услуги' не содержит колонки 'Файл Excel'")
         sys.exit(2)
 
-    df1 = df_services[df_services['Файл Excel']==tk_names[0]]
-    df2 = df_services[df_services['Файл Excel']==tk_names[1]]
+    # df1 = df_services[df_services['Файл Excel']==tk_names[0]]
+    # df2 = df_services[df_services['Файл Excel']==tk_names[1]]
+    df1 = df_services[df_services['Модель пациента']==model_names[0]]
+    df2 = df_services[df_services['Модель пациента']==model_names[1]]
     # print(df1.shape, df2.shape)
     print(f"Количество услуг: {model_names[0]}: {df1.shape}, {model_names[1]}: {df2.shape}")
 
@@ -373,8 +375,10 @@ def LP_comparison(
     if 'Файл Excel' not in df_LP.columns:
         logger.error(f"Обработка прекращена: файл со сводом ТК, лист'ЛП' не содержит колонки 'Файл Excel'")
         sys.exit(2)
-    df1 = df_LP[df_LP['Файл Excel']==tk_names[0]]
-    df2 = df_LP[df_LP['Файл Excel']==tk_names[1]]
+    # df1 = df_LP[df_LP['Файл Excel']==tk_names[0]]
+    # df2 = df_LP[df_LP['Файл Excel']==tk_names[1]]
+    df1 = df_LP[df_LP['Модель пациента']==model_names[0]]
+    df2 = df_LP[df_LP['Модель пациента']==model_names[1]]
     # print(df1.shape, df2.shape)
     print(f"Количество ЛП: {model_names[0]}: {df1.shape[0]}, {model_names[1]}: {df2.shape[0]}")
     LP_df1 = df1[col_to_compare].unique()
@@ -414,8 +418,11 @@ def RM_comparison(
         logger.error(f"Обработка прекращена: файл со сводом ТК, лист'РМ' не содержит колонки 'Файл Excel'")
         sys.exit(2)
 
-    df1 = df_RM[df_RM['Файл Excel']==tk_names[0]]
-    df2 = df_RM[df_RM['Файл Excel']==tk_names[1]]
+    # df1 = df_RM[df_RM['Файл Excel']==tk_names[0]]
+    # df2 = df_RM[df_RM['Файл Excel']==tk_names[1]]
+    df1 = df_RM[df_RM['Модель пациента']==model_names[0]]
+    df2 = df_RM[df_RM['Модель пациента']==model_names[1]]
+
     print(f"Количество МИ/РМ: {model_names[0]}: {df1.shape[0]}, {model_names[1]}: {df2.shape[0]}")
     RM_df1 = df1[col_to_compare].unique()
     RM_df2 = df2[col_to_compare].unique()
@@ -451,8 +458,10 @@ def services_analysis(
 
     codes_columns_services = ['Код раздела', 'Код типа', 'Код класса']
     code_names_columns_services = ['Раздел', 'Тип', 'Класс']
-    services_mask_base = df_services['Файл Excel'] == tk_names[0]
-    services_mask_techno = df_services['Файл Excel'] == tk_names[1]
+    # services_mask_base = df_services['Файл Excel'] == tk_names[0]
+    # services_mask_techno = df_services['Файл Excel'] == tk_names[1]
+    services_mask_base = df_services['Модель пациента'] == model_names[0]
+    services_mask_techno = df_services['Модель пациента'] == model_names[1]
     # print(f"!!! services_analysis: tk_names: {tk_names}, model_names: {model_names}")
     # sys.exit(2)
     # tk_names = [models_dict_lst[0]['Файл Excel'], models_dict_lst[1]['Файл Excel'] ]
@@ -478,11 +487,15 @@ def services_analysis(
 
     for i_col, col_name in enumerate(codes_columns_services):
         diff_lst.append([])
-        df_p = pd.DataFrame({'count' : df_a.groupby( ['Файл Excel', col_name] ).size()}).reset_index().pivot([col_name], ['Файл Excel'] )\
-        .fillna(0)
+        # df_p = pd.DataFrame({'count' : df_a.groupby( ['Файл Excel', col_name] ).size()}).reset_index().pivot([col_name], ['Файл Excel'] )\
+        # .fillna(0)
+        df_p = pd.DataFrame({'count' : df_a.groupby( ['Модель пациента', col_name] ).size()}).reset_index().pivot(
+          [col_name], ['Модель пациента'] ).fillna(0)
+        # model_names Модель пациента
         # print(df_p.columns)
         # display(df_p.head(2))
-        df_pp = simplify_multi_index (df_p, tk_names, model_names)
+        # df_pp = simplify_multi_index (df_p, tk_names, model_names)
+        df_pp = simplify_multi_index (df_p, model_names, model_names)
         print(f"!!! services_analysis: df_pp.head(2)")
         print(df_pp.columns)
         display(df_pp.head(2))
@@ -545,8 +558,10 @@ def services_analysis_02(
 
     codes_columns_services = ['Код раздела', 'Код типа', 'Код класса']
     code_names_columns_services = ['Раздел', 'Тип', 'Класс']
-    services_mask_base = df_services['Файл Excel'] == tk_names[0]
-    services_mask_techno = df_services['Файл Excel'] == tk_names[1]
+    # services_mask_base = df_services['Файл Excel'] == tk_names[0]
+    # services_mask_techno = df_services['Файл Excel'] == tk_names[1]
+    services_mask_base = df_services['Модель пациента'] == model_names[0]
+    services_mask_techno = df_services['Модель пациента'] == model_names[1]
     df_a = df_services[services_mask_base | services_mask_techno]
     # tk_name, model, analysis_part, analysis_part_code = 'Нейрохирургия',  'База', 'Услуги', 1
     # tk_name, model, analysis_part, analysis_part_code = tk_code_name,  'База', 'Услуги', 1
@@ -562,15 +577,20 @@ def services_analysis_02(
     for i_col, col_name in enumerate(codes_columns_services):
         diff_lst.append([])
         if agg_type == 'Среднее':
-            df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['mean']})\
-                        .reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+            # df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['mean']})\
+                        # .reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+             df_p = df_a.groupby( ['Модель пациента', col_name, ] ).agg({indicator_col_name: ['mean']})\
+                        .reset_index().pivot([col_name], ['Модель пациента'] ).fillna(0)
         elif agg_type == 'Сумма':
-            df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['sum']})\
-                        .reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+            # df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['sum']})\
+                        # .reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+            df_p = df_a.groupby( ['Модель пациента', col_name, ] ).agg({indicator_col_name: ['sum']})\
+                        .reset_index().pivot([col_name], ['Модель пациента'] ).fillna(0)
         # print(df_p.columns)
         # display(df_p.head(2))
-        df_pp = simplify_multi_index_02 (df_p, tk_names, model_names)
+        # df_pp = simplify_multi_index_02 (df_p, tk_names, model_names)
         # df_pp = simpl_multi_index_02 (df_p, tk_names, model_names)
+        df_pp = simplify_multi_index_02 (df_p, model_names, model_names)
         # display(df_pp.head(2))
         kind = 'bar' #'kde' #'area' #'bar'
         title = '\n'.join([tk_code_name, 'Услуги', analysis_subpart]) #, indicator_col_name]) #, col_name])
@@ -668,8 +688,11 @@ def LP_analysis(
     path_tk_models_processed
     ):
 
-    lp_mask_base = df_LP['Файл Excel'] == tk_names[0]
-    lp_mask_techno = df_LP['Файл Excel'] == tk_names[1]
+    # lp_mask_base = df_LP['Файл Excel'] == tk_names[0]
+    # lp_mask_techno = df_LP['Файл Excel'] == tk_names[1]
+    lp_mask_base = df_LP['Модель пациента'] == model_names[0]
+    lp_mask_techno = df_LP['Модель пациента'] == model_names[1]
+
     req_cols = ['Код группы ЛП (АТХ)', 'Форма выпуска лекарственного препарата (ЛП)','ФТГ']
     if not set(req_cols).issubset(list(df_LP.columns)) :
         logger.error(f"Обработка прекращена: файл со сводом ТК, лист'ЛП' не содержит всех колонок '{str(req_cols)}'")
@@ -694,8 +717,10 @@ def LP_analysis(
     y_lim_min = 0
 
     for i_col, col_name in enumerate(columns_to_compare):
-        df_p = pd.DataFrame({'count' : df_a.groupby( ['Файл Excel', col_name] ).size()}).reset_index().pivot([col_name], ['Файл Excel'] )\
-        .fillna(0)
+        df_p = pd.DataFrame({'count' : df_a.groupby(
+           #['Файл Excel', col_name] ).size()}).reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+           ['Модель пациента', col_name] ).size()}).reset_index().pivot([col_name], ['Модель пациента'] ).fillna(0)
+                   
         # display(df_p.reset_index())
         kind = 'bar'
         df_pp = simplify_multi_index (df_p, tk_names, model_names)
@@ -750,8 +775,10 @@ def LP_analysis_02(
     agg_type = 'Среднее',
     ):
     # print("analysis_part:", analysis_part)
-    lp_mask_base = df_LP['Файл Excel'] == tk_names[0]
-    lp_mask_techno = df_LP['Файл Excel'] == tk_names[1]
+    # lp_mask_base = df_LP['Файл Excel'] == tk_names[0]
+    # lp_mask_techno = df_LP['Файл Excel'] == tk_names[1]
+    lp_mask_base = df_LP['Модель пациента'] == model_names[0]
+    lp_mask_techno = df_LP['Модель пациента'] == model_names[1]
 
     # tk_name, analysis_part, analysis_part_code = tk_code_name, 'ЛП', 2
     columns_to_compare =['Код анатомического органа или системы',
@@ -775,11 +802,17 @@ def LP_analysis_02(
     for i_col, col_name in enumerate(columns_to_compare):
         diff_lst.append([])
         if agg_type == 'Среднее':
-            df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['mean']})\
-                        .reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+            df_p = df_a.groupby(
+               # ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['mean']}).reset_index(
+               # ).pivot([col_name], ['Файл Excel'] ).fillna(0)
+               ['Модель пациента', col_name, ] ).agg({indicator_col_name: ['mean']}).reset_index(
+               ).pivot([col_name], ['Модель пациента'] ).fillna(0)
+                        
         elif agg_type == 'Сумма':
-            df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['sum']})\
-                        .reset_index().pivot([col_name], ['Файл Excel'] ).fillna(0)
+            # df_p = df_a.groupby( ['Файл Excel', col_name, ] ).agg({indicator_col_name: ['sum']}).reset_index(
+              # ).pivot([col_name], ['Файл Excel'] ).fillna(0)
+            df_p = df_a.groupby( ['Модель пациента', col_name, ] ).agg({indicator_col_name: ['sum']}).reset_index(
+              ).pivot([col_name], ['Модель пациента'] ).fillna(0)
         # print(df_p.columns)
         # display(df_p.head(2))
         df_pp = simplify_multi_index_02 (df_p, tk_names, model_names)
@@ -1204,15 +1237,17 @@ def total_comparsion_analysis_options_02(
         fn_check_file1, fn_check_file2,
         df_services, df_LP, df_RM,
         cmp_file_name,
-        profile_01, tk_code_01, tk_name_01, model_01,
-        profile_02, tk_code_02, tk_name_02, model_02,
-        models):
+        profile_01, tk_code_01, tk_name_01, # model_01,
+        profile_02, tk_code_02, tk_name_02, # model_02,
+        models
+        ):
 
     xls_files = [fn_check_file1, fn_check_file2,]
     tk_codes = [tk_code_01, tk_code_02]
     tk_names = xls_files #[tk_name_01, tk_name_02]
     tk_names_short = [tk_name_01.split()[0], tk_name_02.split()[0]]
     tk_code_name = cmp_file_name
+    # model_names = [model_01, model_02] #
     model_names = models
     print(tk_names)
     print(model_names)
@@ -1329,8 +1364,8 @@ def compare_tk_options_02( data_source_dir, data_processed_dir, supp_dict_dir,
         fn_check_file1, fn_check_file2,
         df_services, df_LP, df_RM,
         cmp_file_name,
-        profile_01, tk_code_01, tk_name_01, model_01,
-        profile_02, tk_code_02, tk_name_02, model_02,
+        profile_01, tk_code_01, tk_name_01, # model_01,
+        profile_02, tk_code_02, tk_name_02, # model_02,
         models=models)
 
 

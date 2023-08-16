@@ -433,16 +433,6 @@ def preprocess_tkbd_options_02(
                 print(f"'{section}', file_02: renamed_columns: {renamed_columns2_str}")
     # print(renamed_columns1, renamed_columns2)
 
-    ######################
-    # update Модель пациента
-    for df in df_cmp1:
-        if df is not None:
-            df['Модель пациента']=models[0]
-    for df in df_cmp2:
-        if df is not None:
-            df['Модель пациента']=models[0]
-    #####################
-
     col_significance = 'Частота_Кратность'
     col_fractions  = 'Частота_Кратность_fraction'
     col_significance_serv = 'Частота_Кратность_Услуги_УЕТ'
@@ -500,14 +490,27 @@ def preprocess_tkbd_options_02(
         df_to_save_lst.append(df_services)
         # print("significance_check", significance_check)
         if significance_check != 'Все строки':
-            print("df_cmp1_s[ind].columns", df_cmp1_s[ind].columns)
-            print("df_cmp2_s[ind].columns", df_cmp2_s[ind].columns)
+            # print("df_cmp1_s[ind].columns", df_cmp1_s[ind].columns)
+            # print("df_cmp2_s[ind].columns", df_cmp2_s[ind].columns)
+            # if significance_serv_by_UET:
+            # print(i_d, section, "if significance_serv_by_UET")
+            # df_s = filter_most_of_fraction_sum(df, col_significance_serv + suffix_fractions, significance_threshold)
             df_services_s = pd.concat(
-                [df_cmp1_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
-                    col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]],
-                df_cmp2_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
-                    col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]]],
-                                    ignore_index=True)
+            [df_cmp1_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
+                col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]],
+            df_cmp2_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
+                col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]]],
+                                ignore_index=True)
+            #else:
+             #   # print(i_d, section, "else if significance_serv_by_UET")
+              #  # df_s = filter_most_of_fraction_sum(df, col_fractions, significance_threshold)
+             #   df_services_s = pd.concat(
+             #   [df_cmp1_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
+             #       col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]],
+             #   df_cmp2_s[ind][['Модель пациента', 'Файл Excel'] + tk_cols[i_s] + [
+             #       col_significance, col_significance + suffix_fractions, col_significance_serv, col_significance_serv + suffix_fractions]]],
+             #                       ignore_index=True)
+            
             df_services_s = preprocess_services(df_services_s)
 
 
