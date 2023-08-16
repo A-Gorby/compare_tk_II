@@ -723,7 +723,8 @@ def LP_analysis(
                    
         # display(df_p.reset_index())
         kind = 'bar'
-        df_pp = simplify_multi_index (df_p, tk_names, model_names)
+        # df_pp = simplify_multi_index (df_p, tk_names, model_names)
+        df_pp = simplify_multi_index (df_p, model_names, model_names)
         # print("df_pp.shape[0]:", df_pp.shape[0])
         kind = 'bar' #'kde' #'area' #'bar'
         title = '\n'.join([tk_code_name, analysis_part])
@@ -815,8 +816,9 @@ def LP_analysis_02(
               ).pivot([col_name], ['Модель пациента'] ).fillna(0)
         # print(df_p.columns)
         # display(df_p.head(2))
-        df_pp = simplify_multi_index_02 (df_p, tk_names, model_names)
+        # df_pp = simplify_multi_index_02 (df_p, tk_names, model_names)
         # df_pp = simpl_multi_index_02 (df_p, tk_names, model_names)
+        df_pp = simplify_multi_index (df_p, model_names, model_names)
         # display(df_pp.head(2))
         kind = 'bar' #'kde' #'area' #'bar'
         title = '\n'.join([tk_code_name, 'ЛП', analysis_subpart]) #, indicator_col_name]) #, col_name])
